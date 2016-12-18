@@ -18,7 +18,7 @@ This is official repository for the StomLib library, an open-source project that
  ```
 dnf config-manager --add-repo https://rpm.xpam.pl
 rpm --import https://rpm.xpam.pl/rpm-pubkey.asc
-dnf install bncsutil
+dnf install stormlib
 ```
 
 ### Centos 7
