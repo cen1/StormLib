@@ -285,10 +285,6 @@ set(ZLIB_FILES
            src/zlib/zutil.c
 )
 
-set(TEST_SRC_FILES
-           test/StormTest.cpp
-)
-
 add_library(${LIBRARY_NAME} ${LIB_TYPE})
 
 target_compile_definitions(${LIBRARY_NAME} PRIVATE -D_7ZIP_ST -DBZ_STRICT_ANSI)
@@ -414,9 +410,7 @@ if (NOT STORM_SKIP_INSTALL)
 endif()
 
 if(STORM_BUILD_TESTS)
-    find_package(ALSA REQUIRED)
-    add_executable(StormLib_test ${TEST_SRC_FILES})
-    target_link_libraries(StormLib_test ${LIBRARY_NAME} ${ALSA_LIBRARIES})
-    install(TARGETS StormLib_test RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    enable_testing()
+    add_subdirectory(test)
 endif()
 

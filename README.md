@@ -60,3 +60,19 @@ cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libstorm-devel-v9.30.x86_64
 
 3. Include StormLib in your project: `#include <StormLib.h>`
 4. Make sure you compile your project with `-lstorm -lz -lbz2`
+
+### List of all CMake options
+
+| Option Name                   | Description                                                       | Default |
+|-------------------------------|-------------------------------------------------------------------|---------|
+| `BUILD_SHARED_LIBS`           | Compile shared libraries                                          | OFF     |
+| `STORM_UNICODE`               | Unicode or ANSI support                                           | OFF     |
+| `STORM_SKIP_INSTALL`          | Skip installing files                                             | OFF     |
+| `STORM_USE_BUNDLED_LIBRARIES` | Force use of bundled dependencies instead of system libraries     | OFF     |
+| `WITH_LIBTOMCRYPT`            | Use system LibTomCrypt library (non-Windows only)                 | OFF     |
+| `STORM_BUILD_TESTS`           | Compile StormLib test application                                 | OFF     |
+| `STORMTEST_USE_OLD_PATHS`     | Uses hardcoded paths for test files, OFF uses `build_folder/work` | ON      |
+
+
+
+STORM_UNICODE
