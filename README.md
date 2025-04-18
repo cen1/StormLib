@@ -26,6 +26,7 @@ amd64
 ```
 "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
 cmake -G "Visual Studio 17 2022" -B build_amd64 -D BUILD_SHARED_LIBS=ON
+cmake --build build --config Release
 ```
 
 ### x86

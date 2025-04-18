@@ -119,6 +119,7 @@ jobs:
         run: |
           $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip"
           Compress-Archive -Path bin/* -DestinationPath $zipName
+          Compress-Archive -Path "lib/*" -DestinationPath $zipName -Update
           Compress-Archive -Path include -DestinationPath $zipName -Update
 
       - uses: actions/upload-artifact@v4
