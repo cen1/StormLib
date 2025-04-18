@@ -100,7 +100,11 @@ jobs:
         working-directory: ./build/Release
         run: |
           file "stormlib.dll"
-          file "stormlib.dll" |grep "${{ inputs.pe_str }}"  
+          if [[ "${{ matrix.arch }}" == "x86" ]]; then
+            file "stormlib.dll" | grep "Intel 80386"
+          else
+            file "stormlib.dll" | grep "x86-64"
+          fi
 
       - name: Create Archive
         shell: pwsh
