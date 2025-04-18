@@ -22,6 +22,9 @@ Note that you can also build the library using newer toolset, such as v143. To d
 5. The result libraries are in `.\bin\Win32` and `.\bin\x64`
 
 ### Windows (any Visual Studio version with CMake)
+You can open the appropriate Visual Studio cmd prompt or launch regular cmd and load the necessary environment as specified below.  
+Change your VS version as needed.
+
 amd64
 ```
 "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
@@ -29,7 +32,7 @@ cmake -G "Visual Studio 17 2022" -B build_amd64 -D BUILD_SHARED_LIBS=ON
 cmake --build build --config Release
 ```
 
-### x86
+x86
 ``` 
 "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x86
 cmake -G "Visual Studio 17 2022" -B build_x86 -D BUILD_SHARED_LIBS=ON
@@ -52,15 +55,15 @@ cmake --build build --config Release
 sudo cmake --install build
 ```
 
-To produce distro packages:
+Include StormLib in your project: `#include <StormLib.h>`  
+Make sure you compile your project with `-lstorm -lz -lbz2`
+
+To produce deb/rpm packages:
 ```
 cd build
 cpack -G "DEB" -D CPACK_PACKAGE_FILE_NAME=libstorm-dev_v9.30_amd64
 cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libstorm-devel-v9.30.x86_64
 ``` 
-
-3. Include StormLib in your project: `#include <StormLib.h>`
-4. Make sure you compile your project with `-lstorm -lz -lbz2`
 
 ### List of all CMake options
 
@@ -73,7 +76,3 @@ cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libstorm-devel-v9.30.x86_64
 | `WITH_LIBTOMCRYPT`            | Use system LibTomCrypt library (non-Windows only)                 | OFF     |
 | `STORM_BUILD_TESTS`           | Compile StormLib test application                                 | OFF     |
 | `STORMTEST_USE_OLD_PATHS`     | Uses hardcoded paths for test files, OFF uses `build_folder/work` | ON      |
-
-
-
-STORM_UNICODE
