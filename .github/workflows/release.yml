@@ -114,7 +114,7 @@ jobs:
         working-directory: ./build
         run: |
           New-Item -ItemType Directory -Path include/stormlib -Force | Out-Null
-          $source = if ("${{ matrix.arch }}" -eq "x86") { "../src/stormlib/*.h" } else { "../src/*.h" }
+          $source = Get-ChildItem ../src/*.h
           Copy-Item -Path $source -Destination include/stormlib
           $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip"
           Compress-Archive -Path Release/* -DestinationPath $zipName
