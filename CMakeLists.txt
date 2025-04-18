@@ -1,5 +1,5 @@
-project(StormLib)
 cmake_minimum_required(VERSION 3.10)
+project(StormLib)
 
 set(LIBRARY_NAME storm)
 set(CMAKE_CXX_STANDARD 11)
@@ -8,17 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CMakeDependentOption)
 include(GNUInstallDirs)
-
-option(STORM_UNICODE "Compile UNICODE version instead of ANSI one (Visual Studio only)" OFF)
-
-if(WIN32)
-    if(STORM_UNICODE)
-        message(STATUS "Build UNICODE version")
-        target_compile_definitions(${LIBRARY_NAME} PRIVATE UNICODE _UNICODE)
-    else()
-        message(STATUS "Build ANSI version")
-    endif()
-endif()
 
 option(BUILD_SHARED_LIBS "Compile shared libraries" OFF)
 option(STORM_SKIP_INSTALL "Skip installing files" OFF)
@@ -344,6 +333,17 @@ endif()
 add_library(${LIBRARY_NAME} ${LIB_TYPE} ${SRC_FILES} ${SRC_ADDITIONAL_FILES} ${STORM_DEF_FILES})
 if(WIN32)
     set_target_properties(${LIBRARY_NAME} PROPERTIES OUTPUT_NAME "StormLib")
+endif()
+
+option(STORM_UNICODE "Compile UNICODE version instead of ANSI one (Visual Studio only)" OFF)
+
+if(WIN32)
+    if(STORM_UNICODE)
+        message(STATUS "Build UNICODE version")
+        target_compile_definitions(${LIBRARY_NAME} PRIVATE UNICODE _UNICODE)
+    else()
+        message(STATUS "Build ANSI version")
+    endif()
 endif()
 
 target_link_libraries(${LIBRARY_NAME} ${LINK_LIBS})
