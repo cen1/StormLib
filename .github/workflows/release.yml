@@ -74,7 +74,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        arch: [ x64, x86 ]
+        arch: [ amd64, x86 ]
         build_type: [ Release ]
 
     steps:
@@ -84,8 +84,8 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
 
-      - name: Configure CMake for x64
-        if: ${{ matrix.arch == 'x64' }}
+      - name: Configure CMake for amd64
+        if: ${{ matrix.arch == 'amd64' }}
         shell: cmd
         run: cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
