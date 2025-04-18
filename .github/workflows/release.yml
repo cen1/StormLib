@@ -152,14 +152,24 @@ jobs:
         with:
           name: stormlib_${{ github.ref_name }}_x86_dll.zip
 
+      - name: Generate SHA256 checksums
+        run: |
+          for file in *.zip *.deb *.rpm; do
+            sha256sum "$file" > "$file.sha256"
+          done
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             libstorm-dev_${{ github.ref_name }}_amd64.deb
+            libstorm-dev_${{ github.ref_name }}_amd64.deb.sha256
             libstorm-devel-${{ github.ref_name }}.x86_64.rpm
+            libstorm-devel-${{ github.ref_name }}.x86_64.rpm.sha256
             stormlib_${{ github.ref_name }}_amd64_dll.zip
+            stormlib_${{ github.ref_name }}_amd64_dll.zip.sha256
             stormlib_${{ github.ref_name }}_x86_dll.zip
+            stormlib_${{ github.ref_name }}_x86_dll.zip.sha256
           tag_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
