@@ -113,9 +113,9 @@ jobs:
         shell: pwsh
         working-directory: ./build
         run: |
-          New-Item -ItemType Directory -Path include/stormlib -Force | Out-Null
+          New-Item -ItemType Directory -Path include -Force | Out-Null
           $source = Get-ChildItem ../src/*.h
-          Copy-Item -Path $source -Destination include/stormlib
+          Copy-Item -Path $source -Destination include
           $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip"
           Compress-Archive -Path Release/* -DestinationPath $zipName
           Compress-Archive -Path include -DestinationPath $zipName -Update
