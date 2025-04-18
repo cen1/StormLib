@@ -126,7 +126,7 @@ jobs:
           retention-days: 1
           overwrite: true
           name: stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip
-          path: build/stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip
+          path: build/staging/stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip
 
   release:
     needs: [deb, rpm, build_dll]
