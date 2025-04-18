@@ -393,6 +393,7 @@ if (NOT STORM_SKIP_INSTALL)
         SET(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local")
 
         #DEB configuration
+        set(CPACK_DEBIAN_PACKAGE_EPOCH 1)
         SET(CPACK_DEBIAN_PACKAGE_SECTION "libs")
         SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://www.zezula.net/en/mpq/stormlib.html")
         SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "imbacen@gmail.com")
