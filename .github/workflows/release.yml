@@ -104,7 +104,7 @@ jobs:
         run: |
           file "stormlib.dll"
           if [[ "${{ matrix.arch }}" == "x86" ]]; then
-            file "stormlib.dll" | grep "Intel 80386"
+            file "stormlib.dll" | grep -E "Intel 80386|Intel i386"
           else
             file "stormlib.dll" | grep "x86-64"
           fi
