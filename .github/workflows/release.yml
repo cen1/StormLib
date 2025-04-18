@@ -109,15 +109,16 @@ jobs:
             file "stormlib.dll" | grep "x86-64"
           fi
 
+      - name: Install to staging area
+        shell: cmd
+        run: cmake --install build --prefix build/staging --config ${{ matrix.build_type }}
+
       - name: Create Archive
         shell: pwsh
-        working-directory: ./build
+        working-directory: ./build/staging
         run: |
-          New-Item -ItemType Directory -Path include -Force | Out-Null
-          $source = Get-ChildItem ../src/*.h
-          Copy-Item -Path $source -Destination include
           $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip"
-          Compress-Archive -Path Release/* -DestinationPath $zipName
+          Compress-Archive -Path bin/* -DestinationPath $zipName
           Compress-Archive -Path include -DestinationPath $zipName -Update
 
       - uses: actions/upload-artifact@v4
