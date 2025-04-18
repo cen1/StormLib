@@ -289,6 +289,8 @@ set(TEST_SRC_FILES
            test/StormTest.cpp
 )
 
+add_library(${LIBRARY_NAME} ${LIB_TYPE})
+
 target_compile_definitions(${LIBRARY_NAME} PRIVATE -D_7ZIP_ST -DBZ_STRICT_ANSI)
 set(LINK_LIBS)
 
@@ -330,7 +332,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Free|Net|Open)BSD")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DO_LARGEFILE=0 -Dstat64=stat -Dlstat64=lstat -Dlseek64=lseek -Doff64_t=off_t -Dfstat64=fstat -Dftruncate64=ftruncate")
 endif()
 
-add_library(${LIBRARY_NAME} ${LIB_TYPE} ${SRC_FILES} ${SRC_ADDITIONAL_FILES} ${STORM_DEF_FILES})
+target_sources(${LIBRARY_NAME} PRIVATE ${SRC_FILES} ${SRC_ADDITIONAL_FILES} ${STORM_DEF_FILES})
 if(WIN32)
     set_target_properties(${LIBRARY_NAME} PROPERTIES OUTPUT_NAME "StormLib")
 endif()
