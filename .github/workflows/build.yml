@@ -74,3 +74,14 @@ jobs:
 
       - name: Build
         run: cmake --build build --config Release
+
+      - name: Debug
+        shell: bash
+        run: ls -la build
+
+      - name: Check PE
+        shell: bash
+        working-directory: ./build/Release
+        run: |
+          file "stormlib.dll"
+          file "stormlib.dll" |grep "x86-64"

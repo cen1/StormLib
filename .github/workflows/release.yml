@@ -83,10 +83,6 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
 
-      - name: Install Conan (x86 only)
-        if: matrix.arch == 'x86'
-        uses: turtlebrowser/get-conan@main
-
       - name: Configure CMake
         shell: cmd
         run: >
@@ -98,6 +94,13 @@ jobs:
       - name: Build
         shell: cmd
         run: cmake --build build --config $BUILD_TYPE
+
+      - name: Check PE
+        shell: bash
+        working-directory: ./build/Release
+        run: |
+          file "stormlib.dll"
+          file "stormlib.dll" |grep "${{ inputs.pe_str }}"  
 
       - name: Create Archive
         shell: pwsh
