@@ -171,7 +171,7 @@ jobs:
       - name: Generate SHA256 checksums
         run: |
           for file in *.zip *.deb *.rpm; do
-            sha256sum "$file" > "$file.sha256"
+            sha256sum "$file" >> "release.sha256"
           done
 
       - name: Create GitHub Release
