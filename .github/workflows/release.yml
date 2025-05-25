@@ -102,7 +102,7 @@ jobs:
 
       - name: Check PE
         shell: bash
-        working-directory: ./build/Release
+        working-directory: ./build/${{ matrix.build_type }}
         run: |
           file "stormlib.dll"
           if [[ "${{ matrix.arch }}" == "x86" ]]; then
