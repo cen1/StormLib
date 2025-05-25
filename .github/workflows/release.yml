@@ -118,6 +118,7 @@ jobs:
 
       - name: Create Archive
         shell: pwsh
+        id: create_archive
         working-directory: ./build/staging
         run: |
           $r = if ("${{ matrix.build_type }}" -eq "Release") { "R" } else { "D" }
@@ -136,8 +137,8 @@ jobs:
         with:
           retention-days: 1
           overwrite: true
-          name: ${{ needs.build.outputs.zip_name }}
-          path: build/staging/${{ needs.build.outputs.zip_name }}
+          name: ${{ steps.create_archive.outputs.zip_name }}
+          path: build/staging/${{ steps.create_archive.outputs.zip_name }}
 
   release:
     needs: [deb, rpm, build_win]
