@@ -104,6 +104,7 @@ jobs:
         shell: bash
         working-directory: ./build/${{ matrix.build_type }}
         run: |
+          ls -la
           file "stormlib.dll"
           if [[ "${{ matrix.arch }}" == "x86" ]]; then
             file "stormlib.dll" | grep -E "Intel 80386|Intel i386"
