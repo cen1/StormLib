@@ -105,11 +105,16 @@ jobs:
         working-directory: ./build/${{ matrix.build_type }}
         run: |
           ls -la
-          file "stormlib.dll"
+          LIBNAME="stormlib.lib"
+          if [[ "${{ matrix.shared }}" == "ON" ]]; then
+            LIBNAME="stormlib.dll"
+          fi
+        
+          file "$LIBNAME"
           if [[ "${{ matrix.arch }}" == "x86" ]]; then
-            file "stormlib.dll" | grep -E "Intel 80386|Intel i386"
+            file "$LIBNAME" | grep -E "Intel 80386|Intel i386"
           else
-            file "stormlib.dll" | grep "x86-64"
+            file "$LIBNAME" | grep "x86-64"
           fi
 
       - name: Install to staging area
