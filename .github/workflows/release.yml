@@ -69,13 +69,15 @@ jobs:
           name: libstorm-devel-${{ github.ref_name }}.x86_64.rpm
           path: build/libstorm-devel-${{ github.ref_name }}.x86_64.rpm
 
-  build_dll:
+  build_win:
     if: true
     runs-on: windows-latest
     strategy:
       matrix:
         arch: [ amd64, x86 ]
-        build_type: [ Release ]
+        build_type: [ Release, Debug ]
+        unicode: [ ON, OFF ]
+        shared: [ ON, OFF ]
 
     steps:
       - uses: actions/checkout@v4
@@ -87,12 +89,12 @@ jobs:
       - name: Configure CMake for amd64
         if: ${{ matrix.arch == 'amd64' }}
         shell: cmd
-        run: cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        run: cmake -B build -DBUILD_SHARED_LIBS=${{ matrix.shared }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DSTORM_UNICODE=${{ matrix.unicode }}
 
       - name: Configure CMake for x86
         if: ${{ matrix.arch == 'x86' }}
         shell: cmd
-        run: cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -A Win32
+        run: cmake -B build -DBUILD_SHARED_LIBS=${{ matrix.shared }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DSTORM_UNICODE=${{ matrix.unicode }} -A Win32
 
       - name: Build
         shell: cmd
@@ -117,7 +119,14 @@ jobs:
         shell: pwsh
         working-directory: ./build/staging
         run: |
-          $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip"
+          $r = if ("${{ matrix.build_type }}" -eq "Release") { "R" } else { "D" }
+          $a = if ("${{ matrix.unicode }}" -eq "ON") { "U" } else { "A" }
+          $s = if ("${{ matrix.shared }}" -eq "ON") { "D" } else { "S" }
+      
+          $zipSuffix = "${r}${a}${s}"
+          $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_${zipSuffix}.zip"
+          "zip_name=$zipName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+    
           Compress-Archive -Path bin/* -DestinationPath $zipName
           Compress-Archive -Path "lib/*" -DestinationPath $zipName -Update
           Compress-Archive -Path include -DestinationPath $zipName -Update
@@ -126,11 +135,11 @@ jobs:
         with:
           retention-days: 1
           overwrite: true
-          name: stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip
-          path: build/staging/stormlib_${{ github.ref_name }}_${{ matrix.arch }}_dll.zip
+          name: ${{ needs.build.outputs.zip_name }}
+          path: build/staging/${{ needs.build.outputs.zip_name }}
 
   release:
-    needs: [deb, rpm, build_dll]
+    needs: [deb, rpm, build_win]
     runs-on: ubuntu-latest
 
     steps:
@@ -144,15 +153,10 @@ jobs:
         with:
           name: libstorm-devel-${{ github.ref_name }}.x86_64.rpm
 
-      - name: Download dll amd64
+      - name: Download win
         uses: actions/download-artifact@v4
         with:
-          name: stormlib_${{ github.ref_name }}_amd64_dll.zip
-
-      - name: Download dll x86
-        uses: actions/download-artifact@v4
-        with:
-          name: stormlib_${{ github.ref_name }}_x86_dll.zip
+          pattern: "*.zip"
 
       - name: Generate SHA256 checksums
         run: |
@@ -164,14 +168,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            libstorm-dev_${{ github.ref_name }}_amd64.deb
-            libstorm-dev_${{ github.ref_name }}_amd64.deb.sha256
-            libstorm-devel-${{ github.ref_name }}.x86_64.rpm
-            libstorm-devel-${{ github.ref_name }}.x86_64.rpm.sha256
-            stormlib_${{ github.ref_name }}_amd64_dll.zip
-            stormlib_${{ github.ref_name }}_amd64_dll.zip.sha256
-            stormlib_${{ github.ref_name }}_x86_dll.zip
-            stormlib_${{ github.ref_name }}_x86_dll.zip.sha256
+            *.deb
+            *.sha256
+            *.rpm
+            *.zip
           tag_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
