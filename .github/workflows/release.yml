@@ -128,11 +128,17 @@ jobs:
           $zipSuffix = "${r}${a}${s}"
           $zipName = "stormlib_${{ github.ref_name }}_${{ matrix.arch }}_${zipSuffix}.zip"
           "zip_name=$zipName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-    
-          Compress-Archive -Path bin/* -DestinationPath $zipName
-          Compress-Archive -Path "lib/*" -DestinationPath $zipName -Update
-          Compress-Archive -Path include -DestinationPath $zipName -Update
-
+          
+          Compress-Archive -Path include -DestinationPath $zipName
+          
+          $binItems = Get-ChildItem -Path bin\* -ErrorAction SilentlyContinue
+          if ($binItems) {
+            Compress-Archive -Path bin/* -DestinationPath $zipName -Update
+          }
+          $libItems = Get-ChildItem -Path lib\* -ErrorAction SilentlyContinue
+          if ($libItems) {
+            Compress-Archive -Path "lib/*" -DestinationPath $zipName -Update
+          }
       - uses: actions/upload-artifact@v4
         with:
           retention-days: 1
